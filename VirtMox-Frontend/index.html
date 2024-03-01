@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" href="/favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>VirtMox</title>
+    </head>
+    <body
+        class="grid grid-cols-1 grid-rows-3 h-screen"
+        style="grid-template-rows: 10% 80% 10%"
+    >
+        <header
+            class="row-start-1 row-end-2 p-2 w-full flex items-center justify-center border-b-2"
+        >
+            <img src="VirtMox-Logo.png" alt="VirtMox-Logo" class="h-16" />
+            <h1
+                class="m-0 text-7xl font-bold text-balance text-wrap bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 from-40% to-cyan-500 to-60%"
+            >
+                VirtMox
+            </h1>
+        </header>
+
+        <div
+            id="app"
+            class="grid grid-cols-2 grid-rows-1"
+            style="grid-template-columns: 10% 90%"
+        ></div>
+
+        <footer class="row-start-3 row-end-3 border-t-2 w-full">
+            <div class="flex items-center justify-center">
+                <img
+                    src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png"
+                    alt="Github-Logo"
+                    class="h-8"
+                />
+                <a
+                    href="https://github.com/Lu-Die-Milchkuh/VirtMox"
+                    class="ml-2"
+                    >Github</a
+                >
+            </div>
+        </footer>
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>
