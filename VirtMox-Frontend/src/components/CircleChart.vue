@@ -53,7 +53,7 @@ export default {
 
                 let color
                 if (this.percentage < 50) {
-                    color = "green"
+                    color = "rgb(0, 255, 0)"
                 } else if (this.percentage >= 50 && this.percentage < 75) {
                     color = "yellow"
                 } else {

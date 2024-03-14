@@ -20,7 +20,15 @@
     </main>
 </template>
 
-<script setup lang="ts">
+<script lang="ts">
 import CPUInfo from "../components/CPUInfo.vue"
-import CPUCoreInfo from "../components/CPUCoreInfo.vue"
+import CPUCoreInfo from "@/components/CPUCoreInfo.vue"
+
+export default {
+    name: "CPUView",
+    components: {
+        CPUInfo,
+        CPUCoreInfo
+    }
+}
 </script>

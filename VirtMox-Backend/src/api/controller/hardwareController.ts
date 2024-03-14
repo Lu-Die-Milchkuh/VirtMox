@@ -68,3 +68,34 @@ export async function getCpuCoreStats() {
         temperature: temperature
     }
 }
+
+export async function getDiskLayout() {
+    // Physical Disks
+    const diskLayout = await si.diskLayout()
+    const disks = []
+    for (let i = 0; i < diskLayout.length; i++) {
+        const disk = diskLayout[i]
+        const fileSystem = await si.fsSize(disk.device)
+        const partitions = []
+
+        for (let j = 0; j < fileSystem.length; j++) {
+            const partition = fileSystem[j]
+            partitions.push({
+                fs: partition.fs,
+                type: partition.type,
+                size: partition.size,
+                used: partition.used,
+                mount: partition.mount
+            })
+        }
+        disks.push({
+            device: disk.device,
+            name: disk.name,
+            size: disk.size,
+            partitions: partitions
+        })
+    }
+    return {
+        disks: disks
+    }
+}

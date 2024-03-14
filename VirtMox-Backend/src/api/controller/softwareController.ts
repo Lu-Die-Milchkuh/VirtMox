@@ -12,3 +12,7 @@ export async function getSoftwareInfo() {
         uptime: si.time().uptime
     }
 }
+
+export async function getProcessList() {
+    return await si.processes()
+}

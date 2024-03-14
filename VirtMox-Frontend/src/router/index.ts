@@ -23,6 +23,21 @@ const router = createRouter({
             path: "/cpu-details",
             name: "cpu-details",
             component: () => import("../views/CPUView.vue")
+        },
+        {
+            path: "/disk",
+            name: "disk",
+            component: () => import("../views/DiskView.vue")
+        },
+        {
+            path: "/process",
+            name: "process",
+            component: () => import("../views/ProcessView.vue")
+        },
+        {
+            path: "/vm",
+            name: "vm",
+            component: () => import("../views/VMOverviewView.vue")
         }
     ]
 })

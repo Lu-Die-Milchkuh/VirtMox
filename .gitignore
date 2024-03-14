@@ -1,2 +1,7 @@
 VirtMox-Backend/node_modules
 VirtMox-Frontend/node_modules
+VirtMox-Frontend/.vscode
+VirtMox-Frontend/dist
+VirtMox-Backend/vm
+VirtMox-Backend/.env.local
+

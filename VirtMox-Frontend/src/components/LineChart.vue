@@ -45,13 +45,13 @@ export default {
                     {
                         label: "Download (MB/sec)",
                         borderColor: "blue",
-                        data: Array(61).fill(null), // Initialize with null
+                        data: Array(61).fill(null),
                         fill: false
                     },
                     {
                         label: "Upload (MB/sec)",
                         borderColor: "green",
-                        data: Array(61).fill(null), // Initialize with null
+                        data: Array(61).fill(null),
                         fill: false
                     }
                 ]
@@ -87,8 +87,8 @@ export default {
                                 labelString: "Data"
                             },
                             ticks: {
-                                beginAtZero: false, // Set to false to start from 100
-                                suggestedMin: 100 // Set the suggested minimum to 100
+                                beginAtZero: false,
+                                suggestedMin: 100
                             }
                         }
                     ]
