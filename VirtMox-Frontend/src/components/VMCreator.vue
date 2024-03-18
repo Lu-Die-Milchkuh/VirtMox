@@ -14,9 +14,12 @@
 
                 <label class="flex items-center justify-between">
                     <span class="border-b font-bold">Firmware</span>
-                    <select class="ml-2 rounded-xl p-1 text-indigo-500">
-                        <option>UEFI</option>
-                        <option>BIOS</option>
+                    <select
+                        class="ml-2 rounded-xl p-1 text-indigo-500"
+                        v-model="firmware"
+                    >
+                        <option value="uefi">UEFI</option>
+                        <option value="bios">BIOS</option>
                     </select>
                 </label>
 
@@ -33,6 +36,7 @@
                         :max="max_cpu"
                         value="1"
                         class="ml-2 border text-right"
+                        v-model="cores"
                     />
                 </label>
 
@@ -47,19 +51,23 @@
                         type="number"
                         min="1"
                         :max="max_ram"
-                        :value="Math.round(max_ram / 2)"
+                        :value="512"
                         class="ml-2 border text-right"
+                        v-model="memory"
                     />
                 </label>
 
                 <label class="flex items-center justify-between">
                     <span class="border-b font-bold">GPU</span>
-                    <select class="ml-2 rounded-xl p-1 text-indigo-500">
-                        <option>QXL</option>
-                        <option>VGA</option>
-                        <option>Bochs</option>
-                        <option>Virtio</option>
-                        <option>Ramfb</option>
+                    <select
+                        class="ml-2 rounded-xl p-1 text-indigo-500"
+                        v-model="gpu"
+                    >
+                        <option value="qxl">QXL</option>
+                        <option value="vga">VGA</option>
+                        <option value="bochs">Bochs</option>
+                        <option value="virtio">Virtio</option>
+                        <option value="ramfb">Ramfb</option>
                     </select>
                 </label>
 
@@ -107,11 +115,59 @@
                     </div>
                 </label>
 
-                <DiskCreator v-if="showDiskCreator" />
+                <!-- Disk Creator -->
+                <div
+                    v-show="showDiskCreator"
+                    class="flex flex-col gap-2 bg-gray-100 rounded-xl"
+                >
+                    <ul class="bg-gray-200 h-16 overflow-y-scroll rounded-t-xl">
+                        <li
+                            v-for="(disk, index) in disks"
+                            :key="index"
+                            class="hover:cursor-default border w-fit rounded-xl m-1 bg-gray-300 text-indigo-500 border-indigo-500 p-1"
+                        >
+                            <p>{{ disk.name }}</p>
+                        </li>
+                    </ul>
+
+                    <div class="flex gap-5">
+                        <div>
+                            <p class="border-b text-xs text-right">Name</p>
+                            <input
+                                class="border text-right"
+                                type="text"
+                                v-model="disk_name"
+                            />
+                        </div>
+
+                        <div>
+                            <p class="border-b text-xs text-right">Size (GB)</p>
+                            <input
+                                class="border text-right"
+                                type="number"
+                                @keypress="isNumber"
+                                v-model="disk_size"
+                                min="1"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button
+                            @click="addDisk"
+                            class="bg-indigo-500 hover:bg-indigo-400 text-white p-1 rounded-xl"
+                        >
+                            Add Disk
+                        </button>
+                    </div>
+                </div>
 
                 <label class="flex items-center justify-between">
                     <span class="border-b font-bold">ISO</span>
-                    <select class="ml-2 rounded-xl p-1 text-indigo-500">
+                    <select
+                        class="ml-2 rounded-xl p-1 text-indigo-500"
+                        v-model="iso"
+                    >
                         <option v-for="iso in iso_list" :key="iso" :value="iso">
                             {{ iso }}
                         </option>
@@ -176,23 +232,40 @@
     </dialog>
 </template>
 
-<script lang="ts">
-import DiskCreator from "./DiskCreator.vue"
-
+<script lang="js">
 export default {
     name: "VMCreator",
-    components: {
-        DiskCreator
-    },
+
     methods: {
-        isNumber(event: KeyboardEvent) {
+        addDisk() {
+            if (
+                this.disk_name === "" ||
+                this.disk_size === 0 ||
+                this.disk_size === ""
+            ) {
+                this.$emit("message", {
+                    type: "error",
+                    message: "Name and size are required!"
+                })
+
+                return
+            }
+
+            this.disks.push({
+                name: this.disk_name,
+                size: this.disk_size
+            })
+        },
+
+        isNumber(event) {
             const keyValue = event.key
             if (!/[0-9.]/.test(keyValue)) {
                 event.preventDefault()
             }
         },
-        async handleFileUpload(event: Event) {
-            const file = (event.target as HTMLInputElement).files[0]
+
+        async handleFileUpload(event) {
+            const file = event.target.files[0]
             const title = file.name
             const size = file.size
 
@@ -205,7 +278,9 @@ export default {
 
             for (let i = 0; i < size; i += chunk_size) {
                 const chunk = file.slice(i, i + chunk_size)
-
+                if (!event) {
+                    return
+                }
                 let formData = new FormData()
 
                 formData.append("title", title)
@@ -236,13 +311,62 @@ export default {
             }
 
             this.uploading = false
+            this.$emit("message", {
+                type: "success",
+                message: "Upload successful!"
+            })
         },
+
         toggleDiskCreator() {
             this.showDiskCreator = !this.showDiskCreator
         },
 
-        createVM() {
-            // Getting all the values from the form
+        async createVM() {
+            // Check if all properties are valid
+            if (
+                this.name === "" ||
+                this.firmware === "" ||
+                this.cores === 0 ||
+                this.memory === 0 ||
+                this.disks.length === 0 ||
+                this.iso === ""
+            ) {
+                this.$emit("message", {
+                    type: "error",
+                    message: "Please fill in all fields"
+                })
+
+                return
+            }
+
+            let config = {
+                name: this.name,
+                firmware: this.firmware,
+                cores: this.cores,
+                memory: this.memory,
+                gpu: this.gpu,
+                disks: this.disks,
+                iso: this.iso
+            }
+
+            console.log(config)
+
+            const response = await fetch("http://localhost:3000/vm", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(config)
+            })
+
+            // reset all
+            this.name = ""
+            this.firmware = "uefi"
+            this.cores = 1
+            this.memory = 512
+            this.gpu = "qxl"
+            this.disks = []
+            //this.iso = ""
         }
     },
     data() {
@@ -255,8 +379,16 @@ export default {
             max_ram: 0,
             showDiskCreator: false,
 
+            disks: [],
+            disk_name: "",
+            disk_size: 1,
+
             name: "",
-            firmware: ""
+            firmware: "uefi",
+            cores: 1,
+            memory: 512,
+            gpu: "qxl",
+            iso: ""
         }
     },
     async created() {
@@ -265,6 +397,7 @@ export default {
         if (iso_response.ok) {
             const data = await iso_response.json()
             this.iso_list = data
+            this.iso = data[0]
         }
 
         const specs_response = await fetch("http://localhost:3000/hardware")

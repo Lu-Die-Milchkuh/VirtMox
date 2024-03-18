@@ -1,7 +1,3 @@
-<script setup lang="ts">
-import LoginForm from "../components/LoginForm.vue"
-</script>
-
 <template>
     <main class="items-center">
         <LoginForm />
@@ -9,6 +5,8 @@ import LoginForm from "../components/LoginForm.vue"
 </template>
 
 <script lang="ts">
+import LoginForm from "../components/LoginForm.vue"
+
 export default {
     name: "LoginView",
     components: {}

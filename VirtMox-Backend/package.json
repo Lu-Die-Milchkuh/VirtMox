@@ -8,9 +8,10 @@
   "dependencies": {
     "@elysiajs/cors": "^0.8.0",
     "@elysiajs/static": "^0.8.1",
-    "@iarna/toml": "^2.2.5",
     "elysia": "latest",
-    "systeminformation": "^5.22.0"
+    "json2toml": "^6.1.0",
+    "systeminformation": "^5.22.0",
+    "toml": "^3.0.0"
   },
   "devDependencies": {
     "bun-types": "latest"

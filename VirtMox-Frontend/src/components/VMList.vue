@@ -4,6 +4,7 @@
             <li
                 v-for="vm in vm_list"
                 :key="vm.name"
+                @click="$emit('showVMDetails', vm.name)"
                 class="hover:cursor-pointer hover:rounded-xl hover:text-white text-center border-b hover:bg-gray-400"
             >
                 <h2>{{ vm.name }}</h2>

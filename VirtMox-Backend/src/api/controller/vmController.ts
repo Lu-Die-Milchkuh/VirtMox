@@ -1,4 +1,5 @@
-import { stringify, parse } from "@iarna/toml"
+import toml from "toml"
+import json2toml from "json2toml"
 import { $ } from "bun"
 import { readdir } from "node:fs/promises"
 
@@ -11,7 +12,7 @@ const cw = (await $`pwd`.text()).replace("\n", "")
 // Technically it works via "import data from foo.toml" but this cant
 // be used in a loop
 async function tomlToJson(file_path: string) {
-    return parse(await Bun.file(file_path).text())
+    return toml.parse(await Bun.file(file_path).text())
 }
 
 // Returns an array containing the configuration of each VM
@@ -102,31 +103,35 @@ export async function getISO() {
 }
 
 export async function createVM(ctx) {
-    const { name, firmware, cores, memory, gpu, disks, cdrom } = ctx.body
+    // const { name, firmware,, memory, gpu, disks, cdrom } = ctx.body
 
-    let config = {
-        name: name,
-        system: {
-            command: "cmd",
-            firmware: firmware
-        },
-        cpu: {
-            count: cores
-        },
-        network: {
-            nic: "",
-            user: ""
-        },
-        vga: {
-            type: gpu
-        },
-        cdrom: [{ path: cdrom }],
-        disks: [{ path: "foo.iso" }, { path: "foo2.iso" }]
-    }
+    // let config = {
+    //     name: name,
+    //     system: {
+    //         command: "cmd",
+    //         firmware: firmware
+    //     },
+    //     memory: {
+    //         count: memory.count
+    //     },
+    //     cpu: {
+    //         count: cpu.count
+    //     },
+    //     network: {
+    //         nic: "",
+    //         user: ""
+    //     },
+    //     vga: {
+    //         type: gpu
+    //     },
+    //     cdrom: [{ path: cdrom }],
+    //     disks: [{ path: "foo.iso" }, { path: "foo2.iso" }]
+    // }
+    let config = ctx.body
 
-    let toml = stringify(config)
+    let toml = json2toml(config, { newlineAfterSection: true })
 
-    let config_name = cw + "/vm/config/" + name + ".toml"
+    let config_name = cw + "/vm/config/" + config.name + ".toml"
     await Bun.write(config_name, toml)
 
     console.log(toml)
