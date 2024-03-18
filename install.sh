@@ -22,6 +22,6 @@ cd VirtMox-Backend
 bun install
 
 cd ..
-cp -r VirtMox-Frontend/build VirtMox-Backend/public
+cp -r VirtMox-Frontend/dist VirtMox-Backend/public
 
 echo "VirtMox has been built successfully"
