@@ -2,9 +2,7 @@
 
 ## About
 
-VirtMox is a
-
-## Dependencies
+VirtMox is a Linux distro-independent web frontend that simplifies server monitoring and virtual machine management. With real-time insights into server performance and intuitive tools for creating and managing virtual machines, VirtMox offers a streamlined solution for server administration.
 
 ## Installation
 
@@ -37,3 +35,16 @@ chmod +x install.sh
 ```
 ./install.sh
 ```
+
+## Running the Server
+
+> [!NOTE]
+> The server must be run with superuser privileges in order to authenticate users against the system database
+
+By default the server listens on **Port 3000**, if you want to override this behaviour create a `.env.local` in the root of the backend directory and specify the port you want to use instead:
+
+```
+PORT=8080
+```
+
+To start the server, either ensure that _bun_ is in your **PATH** or run it with the full path, for example: `/path/to/bun run dev`
