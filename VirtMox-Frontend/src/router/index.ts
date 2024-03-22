@@ -1,8 +1,8 @@
-import { createRouter, createWebHistory } from "vue-router"
+import { createRouter, createWebHashHistory } from "vue-router"
 import LoginView from "../views/LoginView.vue"
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHashHistory(),
     routes: [
         {
             path: "/",
@@ -10,41 +10,55 @@ const router = createRouter({
             component: LoginView
         },
         {
-            path: "/dashboard",
+            path: "/web/dashboard",
             name: "dashboard",
             component: () => import("../views/DashboardView.vue")
         },
         {
-            path: "/server",
+            path: "/web/server",
             name: "server",
             component: () => import("../views/ServerView.vue")
         },
         {
-            path: "/cpu-details",
+            path: "/web/cpu-details",
             name: "cpu-details",
             component: () => import("../views/CPUView.vue")
         },
         {
-            path: "/disk",
+            path: "/web/disk",
             name: "disk",
             component: () => import("../views/DiskView.vue")
         },
         {
-            path: "/process",
+            path: "/web/process",
             name: "process",
             component: () => import("../views/ProcessView.vue")
         },
         {
-            path: "/vm",
+            path: "/web/vm",
             name: "vm",
             component: () => import("../views/VMOverviewView.vue")
+        },
+        {
+            path: "/:pathMatch(.*)*",
+            component: () => import("../views/NotFound.vue")
         }
     ]
 })
 
 router.beforeEach((to, from) => {
+    if (!sessionStorage.getItem("loggedin") && to.name !== "home") {
+        console.log("Not logged in")
+        router.push({ name: "home" })
+        return false
+    }
+
+    if (to.name === "home" && sessionStorage.getItem("loggedin")) {
+        router.push({ name: "server" })
+        return false
+    }
+
     return true
-    //return { name: "home" }
 })
 
 export default router
