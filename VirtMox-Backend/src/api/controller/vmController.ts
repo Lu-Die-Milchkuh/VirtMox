@@ -28,8 +28,6 @@ export async function getVmConfigs() {
         configs.push(config)
     }
 
-    // console.log(configs)
-
     return configs
 }
 
@@ -40,39 +38,24 @@ async function getVMConfig(vm_name) {
     let file_path = cw + vm_path + vm_name + ".toml"
     let config = await tomlToJson(file_path)
 
-    console.log(config)
-
     return config
 }
 
-export async function createHDD(ctx) {
-    const { vm_name, size } = ctx.body
-
-    if (!vm_name || !size) {
-        ctx.set.status = 401
-        return {
-            success: false,
-            message: "Some properties are missing"
-        }
+async function createHDD(name, size) {
+    if (!name || !size) {
+        return
     }
 
     let hdd_path = "/vm/hdd/"
+    let full_path = cw + hdd_path + name + ".qcow2"
 
-    let vm_config = await getVMConfig(vm_name)
+    await $`qemu-img create -f qcow2 ${full_path} ${size}G`
 
-    let hdd_count = vm_config.disks.length + 1
-    hdd_path = cw + hdd_path + vm_name + hdd_count + ".qcow2"
-
-    console.log(vm_config)
-
-    const foo = await $`qemu-img create -f qcow2 ${hdd_path} ${size}G`.text()
-
-    console.log(foo)
+    return full_path
 }
 
 // Upload the ISOs to the "ISO" folder, for quick access
 export async function uploadISO(ctx) {
-    // console.log("Upload")
     const { title, chunk } = ctx.body
     const file_name = cw + "/vm/iso/" + title
 
@@ -87,11 +70,7 @@ export async function uploadISO(ctx) {
     const bytes = await chunk.arrayBuffer()
     writer.write(bytes)
     writer.flush()
-
-    // console.log("File uploaded")
 }
-
-async function saveConfig(vm_config) {}
 
 export async function getISO() {
     const iso_path = "/vm/iso/"
@@ -103,36 +82,60 @@ export async function getISO() {
 }
 
 export async function createVM(ctx) {
-    // const { name, firmware,, memory, gpu, disks, cdrom } = ctx.body
+    let request = ctx.body
 
-    // let config = {
-    //     name: name,
-    //     system: {
-    //         command: "cmd",
-    //         firmware: firmware
-    //     },
-    //     memory: {
-    //         count: memory.count
-    //     },
-    //     cpu: {
-    //         count: cpu.count
-    //     },
-    //     network: {
-    //         nic: "",
-    //         user: ""
-    //     },
-    //     vga: {
-    //         type: gpu
-    //     },
-    //     cdrom: [{ path: cdrom }],
-    //     disks: [{ path: "foo.iso" }, { path: "foo2.iso" }]
-    // }
-    let config = ctx.body
+    let config = {
+        name: request.name,
+        system: {
+            command: "qemu-system-x86_64",
+            bios: request.firmware
+        },
+        cpu: {
+            count: request.cores
+        },
+        memory: {
+            count: request.memory
+        },
+        vga: {
+            type: request.gpu
+        },
+        disks: [],
+        cdrom: [
+            {
+                path: request.iso
+            }
+        ]
+    }
+
+    for (let i = 0; i < request.disks.length; i++) {
+        let disk = request.disks[i]
+        let path = await createHDD(disk.name, disk.size)
+
+        config.disks.push({
+            path: path
+        })
+    }
 
     let toml = json2toml(config, { newlineAfterSection: true })
 
     let config_name = cw + "/vm/config/" + config.name + ".toml"
     await Bun.write(config_name, toml)
-
-    console.log(toml)
 }
+
+export async function startVM(ctx) {
+    const { name } = ctx.body
+
+    const config = await getVMConfig(name)
+
+    console.log(config)
+
+    let command = ""
+
+    command = command.concat(config.system.command, " ")
+
+    console.log(command)
+
+    // command -cdrom iso -hda hdd -m memory -enable-kvm
+}
+
+export async function stopVM() {}
