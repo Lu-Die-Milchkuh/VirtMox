@@ -29,7 +29,7 @@
     </main>
 </template>
 
-<script lang="ts">
+<script lang="js">
 export default {
     name: "ProcessView",
     data() {
@@ -50,7 +50,7 @@ export default {
         }
     },
     mounted() {
-        const ws = new WebSocket("ws://localhost:3000")
+        const ws = new WebSocket(`ws://${window.location.host}`)
 
         ws.onopen = () => {
             console.log("Connected to process-details")
@@ -62,7 +62,6 @@ export default {
 
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data)
-            //console.log(data)
             this.processes = data
         }
     }

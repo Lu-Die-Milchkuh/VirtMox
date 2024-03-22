@@ -32,10 +32,21 @@ export default {
     name: "SoftwareInfo",
     components: {},
     methods: {},
+    data() {
+        return {
+            data: {
+                distro: "",
+                hostname: "",
+                platform: "",
+                kernel: "",
+                arch: "",
+                uptime: ""
+            }
+        }
+    },
 
-    async setup() {
-        // TODO: Change URL
-        const response = await fetch("http://localhost:3000/software", {
+    async mounted() {
+        const response = await fetch(`${window.location.origin}/api/software`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -43,10 +54,9 @@ export default {
         })
 
         if (response.ok) {
-            console.log("SoftwareInfo response ok")
             const data = await response.json()
 
-            return { data }
+            this.data = data
         } else {
             console.error("Failed to fetch software data")
         }

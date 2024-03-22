@@ -7,7 +7,7 @@
     </table>
 </template>
 
-<script lang="ts">
+<script lang="js">
 export default {
     name: "CPUInfo",
     data() {
@@ -15,23 +15,28 @@ export default {
             data: []
         }
     },
-    async created() {
-        const response = await fetch("http://localhost:3000/cpu-details", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
+    async mounted() {
+        try {
+            const response = await fetch(`${window.location.origin}/api/cpu-details`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+
+            if (response.ok) {
+                console.log("HardwareInfo response ok")
+                const data = await response.json()
+
+                this.data = data
+            } else {
+                console.error("Failed to fetch hardware data")
             }
-        })
-
-        if (response.ok) {
-            console.log("HardwareInfo response ok")
-            const data = await response.json()
-            console.log(data)
-
-            this.data = data
-        } else {
-            console.error("Failed to fetch hardware data")
+        } catch(error) {
+            alert("Failed to fetch hardware data")
+            console.log(error)
         }
+
     }
 }
 </script>

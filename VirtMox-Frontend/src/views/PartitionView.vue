@@ -30,13 +30,19 @@ import { ref, inject } from "vue"
 
 export default {
     name: "PartitionView",
-    setup() {
+    props: ["partitions"],
+    /*data() {
+        return {
+            partitions: []
+        }
+    },*/
+    /*setup() {
         const partitions = inject("fetchedPartitions", [])
 
         return {
             partitions
         }
-    },
+    },*/
     mounted() {}
 }
 </script>

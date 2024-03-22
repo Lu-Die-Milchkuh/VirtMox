@@ -1,7 +1,7 @@
 <template>
     <div
         ref="message-container"
-        class="absolute top-0 left-0 w-full flex shadow-xl shadow-gray-400"
+        class="z-40 absolute top-0 left-0 w-full flex shadow-xl shadow-gray-400"
         :class="{
             'bg-green-500': type === 'success',
             'bg-red-500': type === 'error',

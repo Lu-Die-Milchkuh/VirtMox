@@ -68,15 +68,20 @@
             v-show="consoleClicked"
             class="relative border-2 border-indigo-500 flex-grow overflow-y-auto"
         >
-            <p>Console Content Here</p>
+            <VMConsole />
         </div>
     </div>
 </template>
 
 <script lang="ts">
+import VMConsole from "./VMConsole.vue"
+
 export default {
     name: "VMTab",
     props: ["vm"],
+    components: {
+        VMConsole
+    },
     data() {
         return {
             detailsClicked: true,

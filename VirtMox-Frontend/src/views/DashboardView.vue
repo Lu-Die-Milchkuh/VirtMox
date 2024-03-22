@@ -7,7 +7,7 @@
                 CPU Usage
             </h2>
             <CircleChart type="cpu" />
-            <ShowMoreButton link="/cpu-details" />
+            <ShowMoreButton link="/web/cpu-details" />
         </div>
         <div class="border overflow-y-scroll relative">
             <h2
@@ -16,7 +16,7 @@
                 RAM Usage
             </h2>
             <CircleChart type="memory" />
-            <ShowMoreButton link="/memory-details" />
+            <ShowMoreButton link="/web/memory-details" />
         </div>
         <div class="border overflow-y-scroll relative">
             <h2
@@ -25,7 +25,7 @@
                 Network Activity
             </h2>
             <LineChart />
-            <ShowMoreButton link="/network-details" />
+            <ShowMoreButton link="/web/network-details" />
         </div>
         <div class="border overflow-y-scroll relative">
             <h2
@@ -34,7 +34,7 @@
                 Disk Usage
             </h2>
             <CircleChart type="disk" />
-            <ShowMoreButton link="/disk" />
+            <ShowMoreButton link="/web/disk" />
         </div>
     </main>
 </template>

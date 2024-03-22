@@ -1,6 +1,6 @@
 <template>
     <h3
-        class="text-center text-1xl font-bold text-balance text-wrap bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 from-40% to-cyan-500 to-60%"
+        class="text-center text-1xl font-bold text-wrap bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 from-40% to-cyan-500 to-60%"
     >
         RAM
     </h3>
@@ -13,7 +13,7 @@
         </tr>
     </table>
     <h3
-        class="text-center text-1xl font-bold text-balance text-wrap bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 from-40% to-cyan-500 to-60%"
+        class="text-center text-1xl font-bold text-wrap bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 from-40% to-cyan-500 to-60%"
     >
         CPU
     </h3>
@@ -54,8 +54,25 @@ export default {
             return Math.round(bytes / 1024 ** 2).toFixed(2)
         }
     },
-    async setup() {
-        const response = await fetch("http://localhost:3000/hardware", {
+    data() {
+        return {
+            data: {
+                memory: {
+                    total: 0
+                },
+                cpu: {
+                    model: "",
+                    physical_cores: 0,
+                    logical_cores: 0,
+                    min_speed: 0,
+                    max_speed: 0,
+                    governor: ""
+                }
+            }
+        }
+    },
+    async mounted() {
+        const response = await fetch(`${window.location.origin}/api/hardware`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -66,7 +83,7 @@ export default {
             console.log("HardwareInfo response ok")
             const data = await response.json()
 
-            return { data }
+            this.data = data
         } else {
             console.error("Failed to fetch hardware data")
         }

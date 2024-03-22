@@ -4,7 +4,11 @@
             <li
                 v-for="vm in vm_list"
                 :key="vm.name"
-                @click="$emit('showVMDetails', vm.name)"
+                @click="selectVM(vm.name)"
+                :class="{
+                    'bg-indigo-500': selectedVM === vm.name,
+                    'text-white': selectedVM === vm.name
+                }"
                 class="hover:cursor-pointer hover:rounded-xl hover:text-white text-center border-b hover:bg-gray-400"
             >
                 <h2>{{ vm.name }}</h2>
@@ -26,10 +30,28 @@
     </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 export default {
     name: "VMList",
     props: ["vm_list"],
-    components: {}
+    components: {},
+    data() {
+        return {
+            selectedVM: null
+        }
+    },
+    methods: {
+        selectVM(vmName) {
+            this.selectedVM = vmName
+            this.$emit("showVMDetails", vmName)
+        }
+    },
+    created() {
+        if (this.vm_list.length > 0) {
+            this.selectedVM = this.vm_list[0].name
+            this.$emit("showVMDetails", this.selectedVM)
+        }
+
+    }
 }
 </script>

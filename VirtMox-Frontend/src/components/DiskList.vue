@@ -4,14 +4,15 @@
             <li
                 :class="[
                     {
-                        ' bg-indigo-100 font-bold': selectedDisk === disk
+                        ' bg-indigo-500 font-bold text-white':
+                            selectedDisk === disk
                     },
                     {
-                        ' bg-indigo-100 font-bold': index === 0 && !selectedDisk
-                    },
-                    'text-center border-b hover:bg-indigo-200 hover:cursor-pointer'
+                        'bg-indigo-500 font-bold text-white':
+                            index === 0 && !selectedDisk
+                    }
                 ]"
-                class="text-center border-b hover:bg-indigo-200 hover:cursor-pointer"
+                class="text-center border-b hover:bg-gray-400 hover:cursor-pointer"
                 v-for="(disk, index) in disks"
                 @click="handleDiskClick(disk)"
             >
@@ -26,23 +27,21 @@
 import { inject, ref } from "vue"
 
 export default {
-    setup() {
-        const fetchedDisks = inject("fetchedDisks", [])
-        return {
-            disks: fetchedDisks
-        }
-    },
+    props: ["disks"],
     data() {
         return {
             selectedDisk: null
         }
     },
-
     methods: {
         handleDiskClick(disk) {
             this.selectedDisk = disk
             this.$emit("disk-click", disk.partitions)
         }
+    },
+    mounted() {
+        this.selectedDisk = this.disks[0]
+
     }
 }
 </script>

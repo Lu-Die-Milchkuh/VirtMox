@@ -4,7 +4,7 @@
     </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -105,7 +105,7 @@ export default {
             let tx_this_second = 0
             let rx_this_second = 0
 
-            network.forEach((element: any) => {
+            network.forEach((element) => {
                 tx_this_second += element.tx_bytes / 1024 ** 2
                 rx_this_second += element.rx_bytes / 1024 ** 2
             })
@@ -164,7 +164,7 @@ export default {
         }
     },
     mounted() {
-        const ws_url = "ws://" + window.location.hostname + ":3000"
+        const ws_url = "ws://" + window.location.host
         const ws = new WebSocket(ws_url)
 
         ws.onopen = () => {

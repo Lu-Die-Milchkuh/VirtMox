@@ -26,7 +26,7 @@ export default {
         }
     },
     mounted() {
-        const ws_url = "ws://" + window.location.hostname + ":3000"
+        const ws_url = "ws://" + window.location.host
         const ws = new WebSocket(ws_url)
 
         ws.onopen = () => {

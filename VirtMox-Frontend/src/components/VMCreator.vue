@@ -1,7 +1,7 @@
 <template>
     <dialog
         v-show="isVisible"
-        class="absolute top-0 left-0 flex justify-center items-center w-full h-full rounded-sm p-1 border border-indigo-500 bg-transparent backdrop-blur-sm"
+        class="z-30 absolute top-0 left-0 flex justify-center items-center w-full h-full rounded-sm p-1 border border-indigo-500 bg-transparent backdrop-blur-sm"
     >
         <div
             class="relative border rounded-xl p-2 bg-white border-indigo-500 flex justify-center items-center flex-col shadow-xl shadow-gray-500"
@@ -281,13 +281,14 @@ export default {
                 if (!event) {
                     return
                 }
+
                 let formData = new FormData()
 
                 formData.append("title", title)
                 formData.append("chunk", chunk)
 
                 const response = await fetch(
-                    "http://localhost:3000/upload-iso",
+                    `${window.location.origin}/api/upload-iso`,
                     {
                         method: "POST",
                         body: formData
@@ -303,7 +304,7 @@ export default {
                 this.uploadProgress = (uploadedChunks / totalChunks) * 100
             }
 
-            const isos = await fetch("http://localhost:3000/iso")
+            const isos = await fetch(`${window.location.origin}/api/iso`)
 
             if (isos.ok) {
                 const data = await isos.json()
@@ -311,6 +312,8 @@ export default {
             }
 
             this.uploading = false
+            this.uploadProgress = 0
+            this.iso = title
             this.$emit("message", {
                 type: "success",
                 message: "Upload successful!"
@@ -349,15 +352,25 @@ export default {
                 iso: this.iso
             }
 
-            console.log(config)
-
-            const response = await fetch("http://localhost:3000/vm", {
+            const response = await fetch(`${window.location.origin}/api/vm`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(config)
             })
+
+            if(response.ok) {
+                this.$emit("message", {
+                    type: "success",
+                    message: "VM Created Successfully"
+                })
+            } else {
+                this.$emit("message", {
+                    type: "error",
+                    message: "Failed to create VM"
+                })
+            }
 
             // reset all
             this.name = ""
@@ -366,7 +379,7 @@ export default {
             this.memory = 512
             this.gpu = "qxl"
             this.disks = []
-            //this.iso = ""
+            //this.iso = ""vm_url
         }
     },
     data() {
@@ -391,8 +404,8 @@ export default {
             iso: ""
         }
     },
-    async created() {
-        const iso_response = await fetch("http://localhost:3000/iso")
+    async mounted() {
+        const iso_response =  await fetch(`${window.location.origin}/api/iso`)
 
         if (iso_response.ok) {
             const data = await iso_response.json()
@@ -400,7 +413,7 @@ export default {
             this.iso = data[0]
         }
 
-        const specs_response = await fetch("http://localhost:3000/hardware")
+        const specs_response = await fetch(`${window.location.origin}/api/hardware`)
 
         if (specs_response.ok) {
             const data = await specs_response.json()

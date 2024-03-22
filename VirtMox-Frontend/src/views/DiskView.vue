@@ -17,7 +17,7 @@
     </main>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import { ref, provide, onMounted } from "vue"
 import ResizableGrid from "../components/ResizableGrid.vue"
 import DiskList from "../components/DiskList.vue"
@@ -30,36 +30,33 @@ export default {
         DiskList,
         PartitionView
     },
-    setup() {
-        const fetchedDisks = ref([])
-        const selectedDiskPartitions = ref([])
-
-        const setPartition = (partitions) => {
-            console.log(partitions)
-            selectedDiskPartitions.value = partitions
-        }
-
-        onMounted(async () => {
-            try {
-                const response = await fetch(
-                    "http://localhost:3000/disk-layout"
-                )
-                const data = await response.json()
-                fetchedDisks.value = data.disks
-
-                setPartition(fetchedDisks.value[0].partitions)
-            } catch (error) {
-                console.error("Error fetching data:", error)
-            }
-        })
-
-        provide("fetchedDisks", fetchedDisks)
-        provide("fetchedPartitions", selectedDiskPartitions)
-
+    data() {
         return {
-            fetchedDisks,
-            selectedDiskPartitions,
-            setPartition
+            fetchedDisks: [],
+            selectedDiskPartitions: []
+        }
+    },
+    methods: {
+        setPartition(partitions) {
+            this.selectedDiskPartitions = partitions
+        }
+    },
+    async mounted() {
+        try {
+            const response = await fetch(`${window.location.origin}/api/disk-layout`)
+            const data = await response.json()
+
+            this.fetchedDisks = data.disks
+            this.selectedDiskPartitions = data.disks[0].partitions
+
+        } catch (error) {
+            console.error("Error fetching data:", error)
+        }
+    },
+    provide() {
+        return {
+            fetchedDisks: this.fetchedDisks,
+            fetchedPartitions: this.selectedDiskPartitions
         }
     }
 }

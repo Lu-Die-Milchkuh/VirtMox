@@ -27,7 +27,7 @@
     </main>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import ResizableGrid from "@/components/ResizableGrid.vue"
 import VMList from "@/components/VMList.vue"
 import VMTab from "@/components/VMTab.vue"
@@ -79,8 +79,8 @@ export default {
             }
         }
     },
-    async created() {
-        const response = await fetch("http://localhost:3000/vm", {
+    async mounted() {
+        const response = await fetch(`${window.location.origin}/api/vm`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -89,8 +89,6 @@ export default {
 
         if (response.ok) {
             const vm_list = await response.json()
-            //console.log(vm_list)
-
             this.selected_vm = vm_list[0]
             this.vm_list = vm_list
         } else {
