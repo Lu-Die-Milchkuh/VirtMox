@@ -17,6 +17,13 @@ bun install
 
 cd ..
 
-cp -r VirtMox-Frontend/dist VirtMox-Backend/public
+echo "Creating directories..."
+
+mkdir -p VirtMox-Backend/public
+mkdir -p VirtMox-Backend/vm/config
+mkdir -p VirtMox-Backend/vm/hdd
+mkdir -p VirtMox-Backend/vm/iso
+
+cp -r VirtMox-Frontend/dist/* VirtMox-Backend/public
 
 echo "VirtMox has been built successfully"
