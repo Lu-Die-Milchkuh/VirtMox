@@ -12,7 +12,7 @@
                             index === 0 && !selectedDisk
                     }
                 ]"
-                class="text-center border-b hover:bg-gray-400 hover:cursor-pointer"
+                class="text-center border-b hover:bg-gray-400 hover:rounded-xl hover:cursor-pointer"
                 v-for="(disk, index) in disks"
                 @click="handleDiskClick(disk)"
             >

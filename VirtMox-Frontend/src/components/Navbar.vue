@@ -3,7 +3,9 @@
         <RouterLink
             to="/web/server"
             class="border-b-2 text-center hover:bg-gray-400 hover:rounded-xl"
-            :class="{ 'bg-indigo-500 text-white': $route.path === '/server' }"
+            :class="{
+                'bg-indigo-500 text-white': $route.path === '/web/server'
+            }"
             >Home</RouterLink
         >
 
@@ -11,7 +13,7 @@
             to="/web/dashboard"
             class="border-b-2 text-center hover:bg-gray-400 hover:rounded-xl"
             :class="{
-                'bg-indigo-500 text-white': $route.path === '/dashboard'
+                'bg-indigo-500 text-white': $route.path === '/web/dashboard'
             }"
             >Dashboard</RouterLink
         >
@@ -19,21 +21,25 @@
         <RouterLink
             to="/web/disk"
             class="border-b-2 text-center hover:bg-gray-400 hover:rounded-xl"
-            :class="{ 'bg-indigo-500 text-white': $route.path === '/disk' }"
+            :class="{
+                'bg-indigo-500 text-white': $route.path === '/web/disk'
+            }"
             >Disks</RouterLink
         >
 
         <RouterLink
             to="/web/process"
             class="border-b-2 text-center hover:bg-gray-400 hover:rounded-xl"
-            :class="{ 'bg-indigo-500 text-white': $route.path === '/process' }"
+            :class="{
+                'bg-indigo-500 text-white': $route.path === '/web/process'
+            }"
             >Processes</RouterLink
         >
 
         <RouterLink
             to="/web/vm"
             class="border-b-2 text-center hover:bg-gray-400 hover:rounded-xl"
-            :class="{ 'bg-indigo-500 text-white': $route.path === '/vm' }"
+            :class="{ 'bg-indigo-500 text-white': $route.path === '/web/vm' }"
             >Virtual Machine</RouterLink
         >
 
