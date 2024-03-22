@@ -8,5 +8,5 @@ import {
 
 export default new Elysia()
     .get("/api/hardware", getHardwareInfo)
-    .get("/api/cpu-details", getCPUInfo())
-    .get("/api/disk-layout", getDiskLayout())
+    .get("/api/cpu-details", getCPUInfo)
+    .get("/api/disk-layout", getDiskLayout)
