@@ -1,7 +1,9 @@
 // TODO: Find out why this style of middleware no longer works like this
 // This somehow causes "Duplicate Content-Length" property in the response header
 export async function auth(ctx) {
-    if (!ctx.bearer) {
+    let token = ctx.headers["authorization"]
+
+    if (!token) {
         ctx.set.status = 400
 
         return {
@@ -10,9 +12,11 @@ export async function auth(ctx) {
         }
     }
 
+    token = token.replace("Bearer", "")
+
     try {
         const profile = await ctx.jwt.verify(
-            ctx.bearer,
+            token,
             Bun.env.JWT_SECRET || "th1s1sv3rystr0ng420$"
         )
 

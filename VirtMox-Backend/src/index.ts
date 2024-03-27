@@ -7,12 +7,10 @@ import websocketPlugin from "./api/websocket/websocket"
 import vmRoutes from "./api/routes/vmRoutes"
 import loginRoutes from "./api/routes/loginRoutes"
 import jwt from "@elysiajs/jwt"
-import bearer from "@elysiajs/bearer"
 
 const PORT = Bun.env.PORT || 3000
 const app = new Elysia()
 
-app.use(bearer())
 app.use(
     jwt({
         name: "jwt",
