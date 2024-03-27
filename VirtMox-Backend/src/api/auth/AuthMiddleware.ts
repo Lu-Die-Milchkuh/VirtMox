@@ -12,7 +12,7 @@ export async function auth(ctx) {
         }
     }
 
-    token = token.replace("Bearer", "")
+    token = token.replace("Bearer ", "")
 
     try {
         const profile = await ctx.jwt.verify(
