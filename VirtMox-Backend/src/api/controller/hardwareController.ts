@@ -1,7 +1,6 @@
 import si from "systeminformation"
 
 export async function getHardwareInfo() {
-    // console.log("here")
     const cpu = await si.cpu()
     const memory = await si.mem()
 

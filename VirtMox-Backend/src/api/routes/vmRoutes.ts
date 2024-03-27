@@ -6,9 +6,9 @@ import {
     createVM,
     startVM
 } from "../controller/vmController"
-import { auth } from "../auth/AuthMiddleware"
+// import { auth } from "../auth/AuthMiddleware"
 
-export default new Elysia().group("/api", { beforeHandle: auth }, (app) =>
+export default new Elysia().group("/api", (app) =>
     app
         .post("/upload-iso", uploadISO)
         .get("/vm", getVmConfigs)

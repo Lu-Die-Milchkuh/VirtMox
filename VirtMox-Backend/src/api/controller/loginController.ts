@@ -7,7 +7,6 @@ export async function login(ctx) {
     const result =
         await $`./src/scripts/checkCredentials.sh ${username} ${password}`
 
-    console.log("Here")
     if (result.exitCode !== 0) {
         ctx.set.status = 401
         return

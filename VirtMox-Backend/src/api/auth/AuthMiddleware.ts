@@ -1,3 +1,5 @@
+// TODO: Find out why this style of middleware no longer works like this
+// This somehow causes "Duplicate Content-Length" property in the response header
 export async function auth(ctx) {
     if (!ctx.bearer) {
         ctx.set.status = 400
@@ -31,13 +33,3 @@ export async function auth(ctx) {
         }
     }
 }
-
-// export async function auth(ctx) {
-//     console.log(ctx.bearer)
-
-//     if (ctx.bearer) {
-//         return {
-//             error: "Foo"
-//         }
-//     }
-// }
