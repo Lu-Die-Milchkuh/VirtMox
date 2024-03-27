@@ -40,6 +40,11 @@ const router = createRouter({
             component: () => import("../views/VMOverviewView.vue")
         },
         {
+            path: "/web/memory-details",
+            name: "memory-details",
+            component: () => import("../views/MemoryView.vue")
+        },
+        {
             path: "/:pathMatch(.*)*",
             component: () => import("../views/NotFound.vue")
         }
@@ -47,13 +52,13 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from) => {
-    if (!sessionStorage.getItem("loggedin") && to.name !== "home") {
+    if (!sessionStorage.getItem("token") && to.name !== "home") {
         console.log("Not logged in")
         router.push({ name: "home" })
         return false
     }
 
-    if (to.name === "home" && sessionStorage.getItem("loggedin")) {
+    if (to.name === "home" && sessionStorage.getItem("token")) {
         router.push({ name: "server" })
         return false
     }

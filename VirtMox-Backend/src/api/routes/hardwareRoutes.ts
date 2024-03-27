@@ -1,4 +1,5 @@
 import { Elysia } from "elysia"
+import { auth } from "../auth/AuthMiddleware"
 
 import {
     getCPUInfo,
@@ -6,7 +7,9 @@ import {
     getHardwareInfo
 } from "../controller/hardwareController"
 
-export default new Elysia()
-    .get("/api/hardware", getHardwareInfo)
-    .get("/api/cpu-details", getCPUInfo)
-    .get("/api/disk-layout", getDiskLayout)
+export default new Elysia().group("/api", { beforeHandle: auth }, (app) =>
+    app
+        .get("/hardware", getHardwareInfo)
+        .get("/cpu-details", getCPUInfo)
+        .get("/disk-layout", getDiskLayout)
+)

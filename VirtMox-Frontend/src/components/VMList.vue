@@ -6,8 +6,7 @@
                 :key="vm.name"
                 @click="selectVM(vm.name)"
                 :class="{
-                    'bg-indigo-500': selectedVM === vm.name,
-                    'text-white': selectedVM === vm.name
+                    'bg-indigo-500 text-white': selectedVM === vm.name
                 }"
                 class="hover:cursor-pointer hover:rounded-xl hover:text-white text-center border-b hover:bg-gray-400"
             >
@@ -51,7 +50,6 @@ export default {
             this.selectedVM = this.vm_list[0].name
             this.$emit("showVMDetails", this.selectedVM)
         }
-
     }
 }
 </script>

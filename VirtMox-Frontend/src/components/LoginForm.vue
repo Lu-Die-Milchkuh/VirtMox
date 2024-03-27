@@ -61,8 +61,8 @@ export default {
                 })
 
                 if(response.ok) {
-                    sessionStorage.setItem("loggedin", true)
-                    console.log("Logged in")
+                    const data = await response.json()
+                    sessionStorage.setItem("token", data.token)
                     this.$router.push({ name: "server" })
                 } else {
                     this.$emit("error", {

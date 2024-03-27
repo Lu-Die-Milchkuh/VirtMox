@@ -1,6 +1,7 @@
 import si from "systeminformation"
 
 export async function getHardwareInfo() {
+    // console.log("here")
     const cpu = await si.cpu()
     const memory = await si.mem()
 
@@ -98,4 +99,10 @@ export async function getDiskLayout() {
     return {
         disks: disks
     }
+}
+
+export async function getMemoryUsageDetails() {
+    const mem = await si.mem()
+
+    return mem
 }

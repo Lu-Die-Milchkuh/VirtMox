@@ -67,7 +67,7 @@ export default {
             this.$router.push({ name: "home" })
         },
         loggedIn() {
-            return sessionStorage.getItem("loggedin")
+            return sessionStorage.getItem("token")
         }
     }
 }

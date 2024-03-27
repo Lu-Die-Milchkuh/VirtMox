@@ -3,6 +3,7 @@ import {
     getCpuCoreStats,
     getCurrentCPULoad,
     getMemoryUsage,
+    getMemoryUsageDetails,
     getNetworkActivity
 } from "../controller/hardwareController"
 import { getProcessList } from "../controller/softwareController"
@@ -43,6 +44,10 @@ export default new Elysia().ws("/", {
 
         if (message == "process") {
             ws.send(await getProcessList())
+        }
+
+        if (message == "memory-details") {
+            ws.send(await getMemoryUsageDetails())
         }
     }
 })

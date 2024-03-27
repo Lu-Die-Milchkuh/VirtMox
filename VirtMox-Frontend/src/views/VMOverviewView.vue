@@ -83,7 +83,8 @@ export default {
         const response = await fetch(`${window.location.origin}/api/vm`, {
             method: "GET",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${sessionStorage.getItem("token")}`
             }
         })
 
