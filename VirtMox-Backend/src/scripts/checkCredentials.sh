@@ -59,17 +59,17 @@ alg=$(echo $hash | cut -c 1-3)
 
 alg_and_salt=$(echo $hash | cut -d "$" -f 2-3)
 
-hashed_password=$(hash_password_crypt "$password" "$alg_and_salt")
+echo "Algorithm: $alg"
+echo "Salt: $alg_and_salt"
 
-#if [[ "$alg" = '$6$' ]]; then
-#  salt=$(echo $hash | cut -d "$" -f 3)
-#  hashed_password=$(hash_password_sha512 "$password" "$salt") 
-#elif [[ "$alg" = '$y$' ]]; then
-#  salt=$(echo $hash | cut -d "$" -f 3)
-#  hashed_password=$(hash_password_yescrypt "$password" "$salt")
-#elif [[ "$alg" = '$1$' ]]; then
-#  echo "Found MD5"
-#fi
+if [[ "$alg" = '$y$' ]]; then
+  echo "yescrypt"
+  alg_and_salt=$(echo $hash | cut -d "$" -f 3)
+  hashed_password=$(hash_password_crypt "$password" "$alg_and_salt")
+else
+  hashed_password=$(hash_password_crypt "$password" "$alg_and_salt")
+
+fi
 
 # Compare the resulting hash with the stored hash
 if [[ "$hashed_password" = "$hash" ]]; then
