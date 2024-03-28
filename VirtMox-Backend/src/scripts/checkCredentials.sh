@@ -8,6 +8,14 @@ function hash_password_sha512 {
     echo $hashed_password
 }
 
+# Generate a hashed password with the given salt and password using YesCrypt
+function hash_password_yescrypt {
+    password="$1"
+    salt="$2"
+    hashed_password=$(yescrypt "$password" "$salt")
+    echo $hashed_password
+}
+
 # We need to read /etc/shadow later, so make sure we got the correct permissions
 if [ "$EUID" -ne 0 ]; then
   echo "Please run as root"
@@ -44,6 +52,9 @@ alg=$(echo $hash | cut -c 1-3)
 if [[ "$alg" = '$6$' ]]; then
   salt=$(echo $hash | cut -d "$" -f 3)
   hashed_password=$(hash_password_sha512 "$password" "$salt") 
+elif [[ "$alg" = '$y$' ]]; then
+  salt=$(echo $hash | cut -d "$" -f 3)
+  hashed_password=$(hash_password_yescrypt "$password" "$salt")
 elif [[ "$alg" = '$1$' ]]; then
   echo "Found MD5"
 fi
