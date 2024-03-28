@@ -15,10 +15,7 @@ export async function auth(ctx) {
     token = token.replace("Bearer ", "")
 
     try {
-        const profile = await ctx.jwt.verify(
-            token,
-            Bun.env.JWT_SECRET || "th1s1sv3rystr0ng420$"
-        )
+        const profile = await ctx.jwt.verify(token)
 
         if (!profile) {
             ctx.set.status = 400
