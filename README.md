@@ -47,4 +47,4 @@ By default the server listens on **Port 3000**, if you want to override this beh
 PORT=8080
 ```
 
-To start the server, either ensure that _bun_ is in your **PATH** or run it with the full path, for example: `/path/to/bun run dev`
+To start the server, either ensure that _bun_ is in your **PATH** or run it with the full path, for example: `/path/to/bun run src/index.ts`
