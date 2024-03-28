@@ -65,10 +65,26 @@ export default {
             this.isVMCreatorVisible = false
         },
 
-        setMessage(data) {
+       async  setMessage(data) {
             this.message = data.message
             this.type = data.type
             this.showMessage = true
+
+            if (data.type === "success" && data.message === "VM Created Successfully") {
+                const response = await fetch(`${window.location.origin}/api/vm`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                }})
+
+                if (response.ok) {
+                    const vm_list = await response.json()
+                    this.vm_list = vm_list
+                    this.selected_vm = vm_list[0]
+                } else {
+                    console.error("Failed to fetch hardware data")
+                }
+            }
         },
 
         showVM(name) {
