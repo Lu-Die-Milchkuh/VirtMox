@@ -41,6 +41,7 @@ async function getVMConfig(vm_name) {
     return config
 }
 
+// Creates a virtual harddisk using qemu-img
 async function createHDD(name, size) {
     if (!name || !size) {
         return
@@ -72,6 +73,7 @@ export async function uploadISO(ctx) {
     writer.flush()
 }
 
+// Get the list of ISOs in the "ISO" folder
 export async function getISO() {
     const iso_path = "/vm/iso/"
     let iso_list = await readdir(`${cw}${iso_path}`)
@@ -81,6 +83,7 @@ export async function getISO() {
     return iso_list
 }
 
+// Creates a new VM using the given configuration
 export async function createVM(ctx) {
     let request = ctx.body
 
