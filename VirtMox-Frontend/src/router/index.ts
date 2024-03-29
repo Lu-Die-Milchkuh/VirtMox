@@ -26,7 +26,7 @@ const router = createRouter({
         },
         {
             path: "/web/disk",
-            name: "disk",
+            name: "di20sk",
             component: () => import("../views/DiskView.vue")
         },
         {
@@ -52,12 +52,14 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from) => {
+    // Redirect to home if not logged in
     if (!sessionStorage.getItem("token") && to.name !== "home") {
         console.log("Not logged in")
         router.push({ name: "home" })
         return false
     }
 
+    // Redirect to server if logged in (replaces the original home page)
     if (to.name === "home" && sessionStorage.getItem("token")) {
         router.push({ name: "server" })
         return false
