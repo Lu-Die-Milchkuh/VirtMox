@@ -5,8 +5,9 @@
         >
             <button
                 class="bg-indigo-500 text-white border-indigo-500 hover:bg-indigo-400 p-1 w-16"
+                @click="startVM"
             >
-                Stop
+                Start
             </button>
             <button
                 class="bg-indigo-500 text-white border-indigo-500 hover:bg-indigo-400 p-1 w-16"
@@ -36,6 +37,12 @@
 
 <script lang="ts">
 export default {
-    name: "VMConsole"
+    name: "VMConsole",
+    methods: {
+        startVM() {
+            console.log("Starting VM")
+            this.$emit("startVM")
+        }
+    }
 }
 </script>

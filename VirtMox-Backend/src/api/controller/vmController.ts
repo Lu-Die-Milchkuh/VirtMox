@@ -2,6 +2,7 @@ import toml from "toml"
 import json2toml from "json2toml"
 import { $ } from "bun"
 import { readdir } from "node:fs/promises"
+import exec from "node:child_process"
 
 const file_writers = new Map()
 
@@ -86,11 +87,12 @@ export async function getISO() {
 // Creates a new VM using the given configuration
 export async function createVM(ctx) {
     let request = ctx.body
+    let iso_path = cw + "/vm/iso/" + request.iso
 
     let config = {
         name: request.name,
         system: {
-            command: "qemu-system-x86_64",
+            command: "/usr/bin/qemu-system-x86_64",
             bios: request.firmware
         },
         cpu: {
@@ -105,7 +107,7 @@ export async function createVM(ctx) {
         disks: [],
         cdrom: [
             {
-                path: request.iso
+                path: iso_path
             }
         ]
     }
@@ -132,13 +134,27 @@ export async function startVM(ctx) {
 
     console.log(config)
 
-    let command = ""
+    let command = String.prototype.concat(config.system.command, " ")
 
-    command = command.concat(config.system.command, " ")
+    for (let disk of config.disks) {
+        command = command.concat("-hda ", disk.path, " ")
+    }
+
+    for (let cdrom of config.cdrom) {
+        command = command.concat("-cdrom ", cdrom.path, " ")
+    }
+
+    command = command.concat("-m ", config.memory.count, " ")
+
+    command = command.concat("-enable-kvm ")
+
+    command = command.concat("-vga ", config.vga.type, " ")
+
+    command = command.concat("-smp ", config.cpu.count)
 
     console.log(command)
 
-    // command -cdrom iso -hda hdd -m memory -enable-kvm
+    exec.exec(command)
 }
 
 export async function stopVM() {}
